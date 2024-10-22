@@ -330,4 +330,16 @@ SELECT * FROM book1 LIMIT 10;
 
 ---
 
-**Thank you for visiting!** 😊
+## 📚 About the Project
+
+These SQL query  were developed as part of my internship project at [**KultureHire.com**](https://www.kulturehire.com/). It provides actionable insights for **HR Managers**, **educators**, **employers**, and **policymakers** looking to better understand and meet the career expectations of Gen Z. 
+
+
+## 📧 Contact
+
+For questions or collaboration, feel free to reach out to me on [Umesh Kumar](https://www.linkedin.com/in/u11kumar) or contact me via email at [u11kumar@gmail.com].
+
+---
+
+**Thank you for checking out my project!** 👏
+
