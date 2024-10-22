@@ -225,6 +225,92 @@ Find the rest of the queries in the repository to explore **work-life balance** 
 
 ---
 
+🚀 How to Convert or Export CSV Dataset to SQL (SQLite or MySQL)
+
+If you've downloaded the CSV dataset from the repository and want to work with it in SQL (SQLite or MySQL), here’s how to do it! 💻
+Option 1: Import CSV into SQLite
+
+    Install SQLite (if not already installed):
+
+    bash
+
+sudo apt-get install sqlite3
+
+Create an SQLite database:
+
+bash
+
+sqlite3 my_database.db
+
+Create a table to hold the CSV data:
+
+sql
+
+CREATE TABLE book1 (
+    gender TEXT,
+    country TEXT,
+    ...  -- (Add columns matching your CSV dataset structure)
+);
+
+Import the CSV into SQLite:
+
+bash
+
+    sqlite3 my_database.db
+    .mode csv
+    .import /path/to/your_dataset.csv book1
+
+    Your data is now in SQLite and ready to query!
+
+Option 2: Import CSV into MySQL
+
+    Install MySQL (if not installed):
+
+    bash
+
+sudo apt-get install mysql-server
+
+Log in to MySQL:
+
+bash
+
+mysql -u root -p
+
+Create a database:
+
+sql
+
+CREATE DATABASE gen_z_aspirations;
+USE gen_z_aspirations;
+
+Create a table matching the CSV columns:
+
+sql
+
+CREATE TABLE book1 (
+    gender VARCHAR(255),
+    country VARCHAR(255),
+    ...  -- (Add columns matching your CSV dataset structure)
+);
+
+Import the CSV into MySQL:
+
+sql
+
+LOAD DATA INFILE '/path/to/your_dataset.csv'
+INTO TABLE book1
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+Check if the data has been loaded:
+
+sql
+
+SELECT * FROM book1 LIMIT 10;
+
+
+---
 ### 💡 How to Use
 
 1. **Clone the repository** or **download** the SQL query file.
