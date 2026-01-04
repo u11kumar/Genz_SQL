@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -e
+
+### EDIT THIS ###
+USERNAME="ravi"
+
+echo "=== Updating system ==="
+pacman -Syu --noconfirm
+
+echo "=== Installing base Wayland stack ==="
+pacman -S --noconfirm \
+  wayland wayland-protocols \
+  xorg-xwayland \
+  wlroots \
+  pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber \
+  seatd dbus \
+  polkit \
+  foot \
+  grim slurp \
+  brightnessctl \
+  network-manager-applet
+
+echo "=== Enabling services ==="
+systemctl enable --now NetworkManager
+systemctl enable --now seatd
+systemctl enable --now dbus
+systemctl enable --now pipewire pipewire-pulse wireplumber
+
+echo "=== Installing Niri compositor ==="
+pacman -S --noconfirm niri
+
+echo "=== Installing greetd (graphical login) ==="
+pacman -S --noconfirm greetd gtkgreet
+
+echo "=== Configuring greetd for Niri (NO TTY LOGIN) ==="
+mkdir -p /etc/greetd
+
+cat > /etc/greetd/config.toml <<EOF
+[terminal]
+vt = 1
+
+[default_session]
+command = "gtkgreet -l --cmd niri"
+user = "greetd"
+EOF
+
+systemctl enable greetd
+
+echo "=== Installing portals (CRITICAL for Wayland apps) ==="
+pacman -S --noconfirm \
+  xdg-desktop-portal \
+  xdg-desktop-portal-wlr \
+  xdg-desktop-portal-gtk
+
+echo "=== Installing Noctalia Shell (Wayland) ==="
+pacman -S --noconfirm \
+  noctalia-shell \
+  noctalia-launcher
+
+echo "=== Installing Swaylock with animations ==="
+pacman -S --noconfirm \
+  swaylock \
+  swaylock-effects
+
+echo "=== Installing KDE Connect (Wayland-ready) ==="
+pacman -S --noconfirm \
+  kdeconnect \
+  qt5-wayland qt6-wayland
+
+echo "=== User configuration ==="
+usermod -aG seat $USERNAME
+
+mkdir -p /home/$USERNAME/.config/niri
+chown -R $USERNAME:$USERNAME /home/$USERNAME/.config
+
+echo "=== Creating basic Niri config ==="
+cat > /home/$USERNAME/.config/niri/config.kdl <<EOF
+input {
+  keyboard {
+    xkb_layout "us"
+  }
+}
+
+spawn-at-startup "noctalia-shell"
+spawn-at-startup "nm-applet"
+spawn-at-startup "kdeconnect-indicator"
+
+bind "Mod+Return" { spawn "foot" }
+bind "Mod+L" { spawn "swaylock --clock --indicator --fade-in 0.3" }
+EOF
+
+chown $USERNAME:$USERNAME /home/$USERNAME/.config/niri/config.kdl
+
+echo "=== Installation complete ==="
+echo "Reboot now. You will land directly in a Wayland login screen."
